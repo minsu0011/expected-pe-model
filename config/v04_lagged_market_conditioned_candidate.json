@@ -1,0 +1,13 @@
+{
+  "candidates": {
+    "gated_lagged_market_conditioned": {
+      "selection_column": "v04_gated_lagged_market_conditioned_expected_pe",
+      "incumbent_column": "ml_expected_pe",
+      "overrides": {
+        "lagged_market_conditioned": {
+          "enabled": true
+        }
+      }
+    }
+  }
+}

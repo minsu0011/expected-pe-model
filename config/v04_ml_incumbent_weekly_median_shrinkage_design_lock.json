@@ -1,0 +1,296 @@
+{
+  "format_version": 1,
+  "status": "terminal_prospective_pass_keep_default_off_no_main_connection",
+  "created_at_utc": "2026-08-18T00:30:33.4395216Z",
+  "candidate_id": "causal_ml_incumbent_weekly_median_shrinkage_v1",
+  "candidate_count": 1,
+  "selection_column": "v04_ml_weekly_median_shrinkage_expected_pe",
+  "incumbent_column": "ml_expected_pe",
+  "semantic_type": "code_owned_incumbent_expected_pe_forecast_stabilizer",
+  "estimand": "current conditional median latent P/E on the frozen v0.3 ml_expected_pe information set at end of day t",
+  "formula": {
+    "z_t": "log(ml_expected_pe_t)",
+    "anchor_t": "median(z_{t-4}, z_{t-3}, z_{t-2}, z_{t-1}, z_t)",
+    "candidate_log_pe_t": "0.75 * z_t + 0.25 * anchor_t",
+    "candidate_pe_t": "exp(candidate_log_pe_t)",
+    "current_row_included": true
+  },
+  "locked_parameters": {
+    "window_sessions": 5,
+    "incumbent_weight": 0.75,
+    "anchor_weight": 0.25,
+    "method": "log_median"
+  },
+  "availability_contract": {
+    "decision_timestamp": "end_of_day_after_ml_expected_pe_t_is_final",
+    "pre_close_forecast_claim_allowed": false,
+    "input_rows": "current row plus four preceding adjacent input rows for the same symbol",
+    "session_definition": "one adjacent input row; calendar-day gaps do not imply a missing session",
+    "global_pipeline_timeline": "globally unique monotonically increasing date single timeline",
+    "symbol_transition": "defensive local-window reset; not a claim of general multi-asset panel support",
+    "direct_observed_pe_consumed": false,
+    "true_fair_pe_consumed": false,
+    "future_rows_consumed": false,
+    "same_row_incumbent_consumed": true,
+    "same_row_market_information_may_be_indirectly_present_in_incumbent": true
+  },
+  "fail_close": {
+    "invalid_or_nonpositive_current_incumbent": "NaN, count=0, fallback_used=false, and reset contiguous window",
+    "fewer_than_five_contiguous_positive_finite_incumbents": "exact current incumbent, count=1..4, fallback_used=true",
+    "duplicate_or_nonmonotone_global_date": "reject whole frame",
+    "missing_or_empty_symbol": "reject whole frame when enabled",
+    "symbol_change_inside_window": "reset local window",
+    "invalid_observed_pe_or_negative_earnings_pipeline_mask": "mask public expected-P/E and fallback flag after operator computation without changing operator history; retain int64 window count as a price-independent audit surface",
+    "nonfinite_candidate_after_exp": "NaN"
+  },
+  "interpretation_limits": {
+    "fundamental_or_intrinsic_fair_pe_claim_allowed": false,
+    "justified_pe_claim_allowed": false,
+    "terminal_pe_forecast_claim_allowed": false,
+    "real_market_out_of_sample_accuracy_established": false
+  },
+  "public_tail_append_columns": [
+    "v04_ml_weekly_median_shrinkage_expected_pe",
+    "v04_ml_weekly_median_shrinkage_window_count",
+    "v04_ml_weekly_median_shrinkage_fallback_used"
+  ],
+  "schema_contract": {
+    "preserved_v04_append_prefix_columns": 93,
+    "preserved_prefix_exact": true,
+    "new_tail_columns": 3,
+    "smoothing_completion_prefix_columns": 96,
+    "later_isolated_matured_proxy_tail_columns": 8,
+    "v04_append_columns": 104,
+    "canonical_total_columns": 254,
+    "bundled_64_total_columns": 168
+  },
+  "production_isolation": {
+    "default_enabled": false,
+    "publication_position": "after_valuation_tail_only",
+    "main_expected_pe_column": "v04_expected_pe",
+    "main_expected_pe_path_connected": false,
+    "valuation_gap_path_connected": false,
+    "valuation_state_path_connected": false,
+    "enabled_vs_disabled_first_93_exact_required": true,
+    "enabled_vs_disabled_main_expected_pe_gap_and_state_exact_required": true,
+    "main_replacement_allowed_by_this_lock": false,
+    "parallel_research_surface_only": true,
+    "public_window_count_dtype": "int64",
+    "invalid_valuation_window_count_behavior": "retain_price_independent_operator_audit_count"
+  },
+  "retrospective_evidence": {
+    "decision": "GO_RETROSPECTIVE_ONLY",
+    "new_seeds_generated_reserved_or_opened": false,
+    "already_spent_seed_count": 26,
+    "paired_rows": 33696,
+    "coverage_every_seed": 1.0,
+    "strict_joint_seed_wins": "26/26",
+    "pooled_fair_log_mae_relative_gain": 0.020080,
+    "pooled_fair_log_rmse_relative_gain": 0.024389,
+    "worst_seed_fair_log_mae_relative_gain": 0.009091,
+    "worst_seed_fair_log_rmse_relative_gain": 0.012317,
+    "minimum_leave_one_seed_out_mae_relative_gain": 0.019621,
+    "minimum_leave_one_seed_out_rmse_relative_gain": 0.023838,
+    "bootstrap_cells_passed": "12/12",
+    "minimum_simultaneous_mae_lcb": 0.016127,
+    "minimum_simultaneous_rmse_lcb": 0.020383,
+    "prefix_invariance_checks_passed": "78/78",
+    "common_mask_sha256": "e80ef74754e515661e4e8797a1f327c5bb5ecc9761999caae8f84d33b9e53d8a",
+    "evidence_limit": "synthetic generator artifacts already inspected before this implementation; not prospective promotion evidence"
+  },
+  "prospective_validation": {
+    "status": "terminal_prospective_pass_against_locked_ml_expected_pe_incumbent",
+    "harness": "HARNESS 2.5",
+    "registry_id": "v04-prospective-spent-seeds-v1",
+    "registry_path": "outputs/v04_spent_seed_registry.json",
+    "output_root": "outputs/ms1",
+    "tuning_seeds": [
+      5303,
+      5407,
+      5501,
+      5603,
+      5701
+    ],
+    "locked_heldout_seeds": [
+      5801,
+      5903,
+      6007,
+      6101,
+      6203
+    ],
+    "seed_values_embedded_in_this_file": true,
+    "seed_values_reserved": true,
+    "seed_sets_disjoint": true,
+    "output_root_created": true,
+    "precommit_source": "independent audit collision check followed by atomic spent-seed registry reservation sequence 4 before any run",
+    "registry_reservation": {
+      "reservation_sequence": 4,
+      "reservation_id": "f78fc3423b2d6823992008413472efa981fd7044f5361a72747ea42d3db9994a",
+      "reservation_entry_sha256": "046d2abb2dad685ebacd7331eeed4decf1e3fb4924db11a5d5962fbedd02bf6f",
+      "heldout_seed_commitment_sha256": "daa7310449678f4fc103d522012b8fbcd53e13c72e401989dd455deb8b86a852"
+    },
+    "source_config_sha256_at_start_and_end": "454cddd612a353208b2e1bcba842e54bbbb50e8874ce03e77393db917bfe8190",
+    "candidate_set_sha256": "4f18057a80bd724c37e215d895eea1c25756ed6bb3dfb333c6117f1008edee6a",
+    "selected_spec_sha256": "9b73401751f80edc3fb2409d205d15acf35aaba02f3e81cc0e1052fa22d18d85",
+    "policy_config_sha256": "72b586bc83d12e10661f43a0ea300f89a03ff53d58467b8b689b1e059f5d5011",
+    "promotion_incumbent": "ml_expected_pe",
+    "promotion_metrics": [
+      "fair_log_mae",
+      "fair_log_rmse"
+    ],
+    "tuning_result": {
+      "seed_count": 5,
+      "common_rows_per_seed": 1296,
+      "coverage_every_seed": 1.0,
+      "fair_log_mae": {
+        "baseline_mean": 0.0433180503968335,
+        "challenger_mean": 0.0424813784453808,
+        "relative_mean_gain": 0.019314626207504904,
+        "strict_seed_wins": 5,
+        "worst_seed_relative_gain": 0.012290643435846007,
+        "minimum_leave_one_seed_out_relative_gain": 0.016390460171877327,
+        "minimum_simultaneous_lcb": 0.009878995548150768
+      },
+      "fair_log_rmse": {
+        "baseline_mean": 0.05396480515579222,
+        "challenger_mean": 0.052769515069081875,
+        "relative_mean_gain": 0.022149437642916193,
+        "strict_seed_wins": 5,
+        "worst_seed_relative_gain": 0.01532564806785974,
+        "minimum_leave_one_seed_out_relative_gain": 0.019370020504783578,
+        "minimum_simultaneous_lcb": 0.013329005271460569
+      },
+      "bootstrap_cells_passed": "12/12",
+      "serial_vs_parallel_exact": true,
+      "causal_prefix_invariance_pass": true,
+      "deterministic_gates_pass": true
+    },
+    "heldout_result": {
+      "seed_count": 5,
+      "common_rows_per_seed": 1296,
+      "coverage_every_seed": 1.0,
+      "fair_log_mae": {
+        "baseline_mean": 0.03736602418406161,
+        "challenger_mean": 0.03645226061244332,
+        "relative_mean_gain": 0.024454396515860954,
+        "strict_seed_wins": 5,
+        "worst_seed_relative_gain": 0.014177018999477264,
+        "minimum_leave_one_seed_out_relative_gain": 0.022863063845107997,
+        "minimum_simultaneous_lcb": 0.01458660866629865
+      },
+      "fair_log_rmse": {
+        "baseline_mean": 0.047154837026101695,
+        "challenger_mean": 0.04578282531741709,
+        "relative_mean_gain": 0.029095884859598846,
+        "strict_seed_wins": 5,
+        "worst_seed_relative_gain": 0.020616880574125366,
+        "minimum_leave_one_seed_out_relative_gain": 0.02657123179490393,
+        "minimum_simultaneous_lcb": 0.019440705710616714
+      },
+      "bootstrap_cells_passed": "12/12",
+      "serial_vs_parallel_exact": true,
+      "causal_prefix_invariance_pass": true,
+      "promotion_pass": true
+    },
+    "terminal_audit": {
+      "verdict": "PASS",
+      "p0_findings": 0,
+      "p1_findings": 0,
+      "promotion_pass_confirmed": true
+    },
+    "on_failure": "remain default-off and do not feed or replace v04_expected_pe",
+    "on_success": "eligible only for separately reviewed parallel-surface publication; no automatic main replacement",
+    "terminal_scope": "formal PASS is against the locked code-owned ml_expected_pe promotion incumbent, not authorization to replace or feed v04_expected_pe"
+  },
+  "prospective_evidence_sha256": {
+    "outputs/v04_spent_seed_registry.json": "d23b53cf1f353c3a009c2b4453b13d78cb79854448ea5b9e0cdecaaa9b0fd156",
+    "outputs/ms1/run_manifest.json": "8bcbc502beba2713c3ec1c31fdbc0d5d72545dedcfa23c4975aa26f14f11d729",
+    "outputs/ms1/promotion_policy.lock.json": "3a3d0fdf0e28b017e579344e88730c62e4a0b9e85506f893c8b854dbf8c716e9",
+    "outputs/ms1/tuning_common_metrics.json": "fcd891733289ba8eaba617704682ac1cd5386d86c632bdc8d9ce5ecccb6552e7",
+    "outputs/ms1/candidate.lock.json": "f5f8fe6d75d6d3961355494b3db5a33d64fce7290ce2999241ae69aa4d852dd5",
+    "outputs/ms1/checkpoint.json": "6bbcb57fe03976a8cd64c60c5516403e35b72b35840c44cfebab0a4d311de4c5",
+    "outputs/ms1/heldout_report.json": "33379d4464a0edf881297460c8f39789150627764ba789f87b4719e88695db72",
+    "outputs/v04_ms1_terminal_audit_20260818/TERMINAL_AUDIT.md": "77e410cdec794cdfd1dcb1a564784274c6e6cfb7127af0bbce5391b43be0ad8b",
+    "outputs/v04_ms1_terminal_audit_20260818/checksums.sha256": "f64f050f277d5124fea0952766c7fb5a412c9e16dd9eba4656b2f6bc97625803"
+  },
+  "prospective_evidence_logical_sha256": {
+    "spent_seed_registry_registry_sha256": "3a10dfe43136d53b3cb894d8086c3bfbab0e1750f2a47959c4e3dca4dbb98e56",
+    "run_manifest_manifest_sha256": "54c3f30d0a271f3f6996e3f57b45569881274aec022be897e9abf4f9e25d6bd9",
+    "promotion_policy_lock_sha256": "6c2824dfaa7d38d0520cba8f9e10f50ef2943861303d647d5a1a56bed8442977",
+    "tuning_metrics_sha256": "0bae7b336a20a0fabb82e72fd7003330eaecc779d5b96bc6c171f2119c86f7cb",
+    "candidate_lock_sha256": "45fd56d854306b111d03cb98843fc9faf74ffed807326bc362f840bfc20b6e91",
+    "checkpoint_sha256": "d71421aacd24f88279f07f3f9f7bb7173700c1cfe261540ea22c21ef005d02f1",
+    "heldout_report_sha256": "c0029a664fa5ff4e9bea28b17cf1facc91fad432a48397546732e8fefc956973"
+  },
+  "downstream_product_decision": {
+    "decision": "KEEP_DEFAULT_OFF_PARALLEL_EOD_RESEARCH_ONLY",
+    "formal_prospective_pass_against_ml_expected_pe": true,
+    "current_v04_expected_pe_replacement_assessment": "FAIL_AS_REPLACEMENT_COMPARATOR",
+    "default_enabled": false,
+    "replace_or_feed_v04_expected_pe": false,
+    "main_expected_pe_path_connected": false,
+    "heldout_comparison_against_current_v04_expected_pe": {
+      "fair_log_mae_relative_mean_gain": 0.0011940211133043296,
+      "fair_log_rmse_relative_mean_gain": 0.002862109860001173,
+      "joint_fair_seed_wins": 4,
+      "worst_seed_fair_log_mae_relative_gain": -0.07079435844873953,
+      "worst_seed_fair_log_rmse_relative_gain": -0.07913472391718739,
+      "practical_margin": 0.005,
+      "material_harm_cap": 0.005
+    },
+    "reason": "formal promotion passed against ml_expected_pe, but the candidate missed the practical margin and caused material heldout seed harm against the actual current v04_expected_pe product comparator",
+    "evidence_sha256": {
+      "outputs/ms1_downstream_product_review_20260818/REPORT.md": "d71ea8494f6c2d1a2abb2ef2c886a4210a4fa7343a98bf7bb63edd8daccc1e30",
+      "outputs/ms1_downstream_product_review_20260818/analysis_summary.json": "3b8ef7ddaa5d16ba152fdd4a595abdd97247ad1efb59d284fc2c4e36840164f6",
+      "outputs/ms1_downstream_product_review_20260818/checksums.sha256": "7845ee8eb1f35c1358b8d4e2bf5580351d0f67222b117c59d2607e4ccdb9a142"
+    }
+  },
+  "hierarchy_branch_family_followup": {
+    "candidate_id": "hierarchy_respecting_branch_local_eod_ml_smoother_v1",
+    "decision": "NO_GO",
+    "fresh_seed_set_proposed": false,
+    "implementation_contract_proposed": false,
+    "decisive_failure": {
+      "comparator": "ml_expected_pe",
+      "gate": "fair_log_mae per-seed material-harm cap",
+      "cap": 0.005,
+      "worst_seed": 307,
+      "worst_seed_relative_gain": -0.023006909561392824
+    },
+    "reason": "the precommitted anti-gaming material-harm cap failed; stop the family",
+    "evidence_sha256": {
+      "outputs/v04_hierarchy_respecting_branch_smoother_prescreen_20260818/DESIGN_LOCK.json": "878597a78b4e3d9a9256fb592d0f8cecc6af29e03ee2a5077876ff8ebff1f227",
+      "outputs/v04_hierarchy_respecting_branch_smoother_prescreen_20260818/result.json": "c99e1a17e16477df13d8f24ce27d0a2a4d56cf12cefbe6e4c78c448841ff6847",
+      "outputs/v04_hierarchy_respecting_branch_smoother_prescreen_20260818/REPORT.md": "f8b36238197edcf8b425faa7154e5d787eae393a6ec54a5ef5d100a85801c45a",
+      "outputs/v04_hierarchy_respecting_branch_smoother_prescreen_20260818/DECISION_SUMMARY.json": "997a9a08759f7b4437bd7cb5a25bacf79fb15b2877054b100d821613af03cf34",
+      "outputs/v04_hierarchy_respecting_branch_smoother_prescreen_20260818/checksums.sha256": "68becef7db1b2545f00be3baeb6a847acdb3ce9a8eb00f403288049e2c46913d"
+    }
+  },
+  "implementation_artifacts_sha256": {
+    "src/pe_regime_v04/ml_incumbent_smoothing.py": "7801d955ce30fabeb0c7c79a044b3322b4fd926fc65c59ddb2f495cf7500979d",
+    "src/pe_regime_v04/config.py": "cd55ef520d0764d113202928434034132e7ea9cf48b1482792fce6ef1066c4d4",
+    "src/pe_regime_v04/pipeline.py": "8b87d514d81df8cd13822cedb6eb7d475424353b5a54f8b7019120f0b2143378",
+    "config/v04_bottleneck.yaml": "1e52f6ed5f5abb3c2b720c58f39360f33506307a0f16571dba85157e534fb84e",
+    "scripts/run_v04_multiseed_validation.py": "c37082831c8df78bf0a0d11a34d9c556fa7ccbf9cc2a254df7a7ca005293b1c9",
+    "tests/test_ml_incumbent_smoothing.py": "50053838f21f8643f8c8a458b423f817c874a8046c5099b60c8b015b5df4b5f7",
+    "tests/test_config.py": "70c74115a9688c33ecda653940264f5972d355956e576cf95a48bedfb5a3c707",
+    "tests/test_in_memory_integration.py": "5038339c6294bc9f256600e6be2541863ce57836e69c1254496982983465eafe",
+    "tests/test_pipeline_smoke.py": "136efeecc3b72780f0b6165016574c153d41e675c4e9ef9ad5491a7ee85bfd14",
+    "tests/test_multiseed_validation_harness.py": "6f2d9f65aa3da471b6bc3b8f1caa3f5949b01dc570ee9d1d73087ee892ce8173",
+    "config/v04_ml_incumbent_weekly_median_shrinkage_candidate.json": "f53521237c5d9b454bab89d3040a68baf2c5a480f3a56db775d882593ef3d8c2"
+  },
+  "retrospective_evidence_sha256": {
+    "outputs/v04_ml_weekly_median_followup_20260818/DESIGN_LOCK.json": "651eecaaa8c0fb2f94ebdb837e567b59c03c94e68b6d3db9cb1130c85d806843",
+    "outputs/v04_ml_weekly_median_followup_20260818/PRECOMMIT.md": "f84d11cdb237b305703b64f7c21b427ae7e658e7b66fc854a2ef405e49cd2cd2",
+    "outputs/v04_ml_weekly_median_followup_20260818/result.json": "65d6baceb6865168ab386f8206f9270020b05d63b99cb42d136901f60bc79862",
+    "outputs/v04_ml_weekly_median_followup_20260818/REPORT.md": "853b4abc068da0157b54ab9616dfe39212e36f48d4f32283d37e68a2f9957393",
+    "outputs/v04_ml_weekly_median_followup_20260818/seed_metrics.csv": "384280cf118a39e3a94c19d621180a7ce27eb8e5166e94156ce220a3478d51f3",
+    "outputs/v04_ml_weekly_median_followup_20260818/common_mask_audit.csv": "eb9aa0b5073f9f21fe93f2ebf46742128a38f0b2becfdae7becc62aa3864b7d1",
+    "outputs/v04_ml_weekly_median_followup_20260818/prefix_invariance.csv": "9d84d3851d24453f348e57c7b1e1f5c219a8561530fef7381b0e7a59fe50d42c",
+    "outputs/v04_ml_weekly_median_followup_20260818/checksums.sha256": "9dfd646b0f6224a66db376422c7a7b1bc350fe3fcdc0dd74241c98be2630f85f",
+    "outputs/v04_ml_smoothing_independent_audit_20260818/AUDIT.md": "57e8ba5f572b32cedf558e601956c7bdcabf8ea5798af43ed24621c79aca534c"
+  },
+  "candidate_spec_sha256": "f53521237c5d9b454bab89d3040a68baf2c5a480f3a56db775d882593ef3d8c2",
+  "logical_lock_hash_rule": "sha256(UTF-8 canonical JSON with sorted keys and compact separators after removing logical_lock_sha256)",
+  "logical_lock_sha256": "ed3fc90590a34fab10666ba56e5b7b0a14c17e57a8d60a055e4c2fbe120d7d4b"
+}

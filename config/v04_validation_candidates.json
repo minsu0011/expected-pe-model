@@ -1,0 +1,54 @@
+{
+  "candidates": {
+    "incumbent_control": {
+      "selection_column": "v04_expected_pe",
+      "incumbent_column": "ml_expected_pe",
+      "overrides": {
+        "expected_pe": {
+          "include_return_forecast_features": false
+        },
+        "ml_incumbent_gate": {
+          "max_challenger_weight": 0.0
+        },
+        "final_guard": {
+          "max_challenger_weight": 0.0
+        }
+      }
+    },
+    "current_regime_default": {
+      "selection_column": "v04_expected_pe",
+      "incumbent_column": "ml_expected_pe",
+      "overrides": {
+        "expected_pe": {
+          "include_return_forecast_features": false
+        }
+      }
+    },
+    "current_regime_strict": {
+      "selection_column": "v04_expected_pe",
+      "incumbent_column": "ml_expected_pe",
+      "overrides": {
+        "expected_pe": {
+          "include_return_forecast_features": false
+        },
+        "ml_incumbent_gate": {
+          "improvement_margin": 0.002,
+          "decisive_margin": 0.004
+        }
+      }
+    },
+    "return_forecast_strict": {
+      "selection_column": "v04_expected_pe",
+      "incumbent_column": "ml_expected_pe",
+      "overrides": {
+        "expected_pe": {
+          "include_return_forecast_features": true
+        },
+        "ml_incumbent_gate": {
+          "improvement_margin": 0.002,
+          "decisive_margin": 0.004
+        }
+      }
+    }
+  }
+}

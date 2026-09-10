@@ -1,0 +1,13 @@
+{
+  "candidates": {
+    "causal_ml_incumbent_weekly_median_shrinkage_v1": {
+      "selection_column": "v04_ml_weekly_median_shrinkage_expected_pe",
+      "incumbent_column": "ml_expected_pe",
+      "overrides": {
+        "ml_incumbent_weekly_median_shrinkage": {
+          "enabled": true
+        }
+      }
+    }
+  }
+}

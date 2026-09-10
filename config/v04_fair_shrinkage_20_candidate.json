@@ -1,0 +1,16 @@
+{
+  "candidates": {
+    "no_regime_shrinkage_20": {
+      "selection_column": "v04_ml_no_regime_shrinkage_expected_pe",
+      "incumbent_column": "ml_expected_pe",
+      "overrides": {
+        "expected_pe": {
+          "include_return_forecast_features": false
+        },
+        "no_regime_shrinkage": {
+          "weight": 0.2
+        }
+      }
+    }
+  }
+}

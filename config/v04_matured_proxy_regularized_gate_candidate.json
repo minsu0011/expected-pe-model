@@ -1,0 +1,12 @@
+{
+  "candidates": {
+    "causal_matured_forward_median_regularized_promotion_v1": {
+      "selection_column": "v04_matured_proxy_regularized_expected_pe",
+      "overrides": {
+        "matured_proxy_gate": {
+          "enabled": true
+        }
+      }
+    }
+  }
+}

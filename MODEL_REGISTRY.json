@@ -1,0 +1,59 @@
+{
+  "formal_statement": "Only v04_expected_pe is production. Included portfolio models are frozen research implementations/evidence and are not silently promoted by this distribution.",
+  "portfolio_lines": {
+    "PE-C1": {
+      "implementation": "pe_c1_c4_fresh_qualification_prediction_v2",
+      "model_id": "bce_v1_b_causal_rolling_dispersion_budget",
+      "status": "RESEARCH_ONLY"
+    },
+    "PE-C2": {
+      "implementation": "pe_c1_c4_fresh_qualification_prediction_v2",
+      "latest_overlay": "c2_r2_sr_a_magnitude_taper",
+      "latest_overlay_status": "RESEARCH_SECONDARY_PENDING_FRESH_FORMAL",
+      "model_id": "bce_v1_d_observable_state_confidence_shrinkage",
+      "status": "RESEARCH_ONLY"
+    },
+    "PE-C3": {
+      "implementation": "pe_c1_c4_fresh_qualification_prediction_v2",
+      "model_id": "bce_tournament_v1_fixed_alpha_040_directional_consensus",
+      "status": "RESEARCH_ONLY_DETERMINISTIC_CONTROL"
+    },
+    "PE-C4": {
+      "implementation": "pe_c4_r2_numerical_robustness_v1",
+      "model_id": "c4_r2_hofs_irls80_block_v04_w0500",
+      "promotion_authority": false,
+      "status": "RESEARCH_CANDIDATE_INCOMPLETE_CORRECTED_STRESS"
+    },
+    "PE-C5": {
+      "implementation": "pe_c5_r2_sequence_research_v1",
+      "promotion_authority": false,
+      "track_p_model": "compact_gru",
+      "track_p_status": "PIT_OBSERVABLE_RESEARCH_PROTOTYPE",
+      "track_s_model": "compact_gru",
+      "track_s_status": "SIMULATOR_SPECIALIST_NOT_DEPLOYABLE"
+    }
+  },
+  "production": {
+    "entrypoint": "python -m pe_regime_v04 run",
+    "frozen_archive_sha256": "0822185c0e2d69bc5b8685680baba136fd043f261912da74ee2c237d92e67c68",
+    "model_id": "v04_expected_pe",
+    "status": "PRODUCTION"
+  },
+  "production_champion": "v04_expected_pe",
+  "registry_mutated": false,
+  "release_date": "2026-09-02",
+  "research_source_dependency_closure": [
+    "hierarchical_observable_fair_value_state_v7",
+    "hofs_research_adapter_v1",
+    "hofs_v12_fresh_qualification_service_v1",
+    "hofs_v4_dgp_r4_prediction_lane_v1",
+    "observable_fair_value_state_v1",
+    "pe_c1_c4_fresh_qualification_prediction_v2",
+    "pe_c2_r2_sparse_router_v1",
+    "pe_c4_r2_numerical_robustness_v1",
+    "pe_c5_r2_sequence_research_v1",
+    "pe_five_candidate_fresh_qualification_evaluator_v1",
+    "pre_certification_research_tournament_v1"
+  ],
+  "schema_version": "expected_pe.full_distribution.model_registry.v1"
+}

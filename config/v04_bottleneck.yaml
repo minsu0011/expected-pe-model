@@ -1,0 +1,209 @@
+project:
+  random_seed: 42
+  allow_existing_v04_columns: false
+
+regime_stacker:
+  enabled: true
+  horizon: 21
+  bull_return_threshold: 0.03
+  bear_return_threshold: -0.03
+  train_window: 1008
+  min_train: 252
+  refit_every: 21
+  n_estimators: 100
+  learning_rate: 0.03
+  num_leaves: 7
+  min_child_samples: 25
+  subsample: 0.90
+  subsample_freq: 1
+  colsample_bytree: 0.85
+  reg_lambda: 1.0
+  deterministic: true
+  force_col_wise: true
+  verbosity: -1
+  probability_floor: 0.01
+  class_weight: null
+  outer_n_jobs: 16
+  parallel_backend: thread
+  n_jobs: 1
+
+statistics:
+  global_lookback: 756
+  global_min_history: 126
+  global_method: median
+
+expected_pe:
+  train_no_regime: true
+  # Both candidates are trained through exactly the same walk-forward function,
+  # folds and hyper-parameters.  v0.3's ML remains a separate production incumbent.
+  train_with_regime: true
+  # Opt-in challenger only.  The raw forecast remains published/validated, but is
+  # not fed to Expected-P/E until locked multi-seed evidence shows incremental value.
+  include_return_forecast_features: false
+  reuse_v03_ml_with_regime: true
+  train_window: 1890
+  min_train: 378
+  refit_every: 1
+  n_estimators: 200
+  learning_rate: 0.03
+  num_leaves: 15
+  max_depth: -1
+  min_child_samples: 15
+  subsample: 0.90
+  subsample_freq: 1
+  colsample_bytree: 0.90
+  reg_alpha: 0.0
+  reg_lambda: 0.2
+  deterministic: true
+  force_col_wise: true
+  verbosity: -1
+  fallback_max_iter: 180
+  fallback_learning_rate: 0.04
+  fallback_max_leaf_nodes: 15
+  outer_n_jobs: 32
+  parallel_backend: thread
+  n_jobs: 1
+
+no_regime_shrinkage:
+  # Evaluation-only causal geometric blend with the v0.3 ML incumbent.
+  weight: 0.50
+
+market_conditioned_diagnostic:
+  # Exploration-locked causal market-conditioned denoiser. It consumes the
+  # current row's observed P/E and never feeds v04_expected_pe or valuation.
+  enabled: true
+  q_over_r: 0.01
+  clip_sigma: 3.0
+  scale_window: 252
+  scale_min_history: 126
+  scale_floor: 0.01
+  latent_weight: 0.25
+
+fundamental_vintage:
+  # Historical prices are labels only after an information vintage has ended;
+  # current security/benchmark prices are never prediction features. Default-off;
+  # the locked research candidate explicitly opts in during validation.
+  enabled: false
+  min_completed_target_vintages: 4
+  min_usable_vintages: 8
+  max_train_vintages: 20
+  quantile: 0.50
+  alpha: 0.05
+  solver: highs
+  growth_winsor_lower: 0.05
+  growth_winsor_upper: 0.95
+  growth_iqr_floor: 0.01
+  target_clip_lower: 0.10
+  target_clip_upper: 0.90
+  confidence_floor: 25.0
+  confidence_ceiling: 100.0
+  approximation_weight: 0.75
+
+lagged_market_conditioned:
+  # Default-off, EOD-only research candidate. The prior state excludes row-t
+  # observed P/E, but the row-t incumbent can still contain price-derived features.
+  enabled: false
+  q_over_r: 0.01
+  clip_sigma: 3.0
+  scale_window: 252
+  scale_min_history: 126
+  scale_floor: 0.01
+  latent_weight: 0.25
+  incumbent_weight: 0.75
+  loss_window: 252
+  min_history: 63
+  improvement_margin: 0.001
+  decisive_margin: 0.002
+  temperature: 0.004
+  max_challenger_weight: 1.0
+  decision_mode: winner_take_most
+  availability_shift: 1
+
+ml_incumbent_weekly_median_shrinkage:
+  # Default-off fixed EOD stabilizer. "Session" means an adjacent input row for
+  # the same symbol; calendar-day gaps are not inferred as missing observations.
+  enabled: false
+  window_sessions: 5
+  incumbent_weight: 0.75
+  anchor_weight: 0.25
+  method: log_median
+
+matured_proxy_gate:
+  # Default-off EOD research gate. Each origin loss becomes eligible only after
+  # its complete 21-session future observed-multiple window plus one extra row.
+  # The current row target and synthetic true_fair_pe are never routing inputs.
+  enabled: false
+  target_horizon_sessions: 21
+  target_method: forward_log_median
+  maturity_shift_sessions: 1
+  loss_window: 252
+  min_history: 63
+  improvement_margin: 0.0
+  temperature: 0.004
+  max_challenger_weight: 0.50
+  blend_method: log_geometric
+
+statistical_gate:
+  loss_window: 252
+  min_history: 63
+  improvement_margin: 0.0
+  decisive_margin: 0.002
+  temperature: 0.004
+  max_challenger_weight: 1.0
+  decision_mode: winner_take_most
+
+ml_no_regime_gate:
+  loss_window: 252
+  min_history: 63
+  improvement_margin: 0.001
+  decisive_margin: 0.002
+  temperature: 0.004
+  max_challenger_weight: 1.0
+  decision_mode: winner_take_most
+
+ml_matched_regime_gate:
+  loss_window: 252
+  min_history: 63
+  improvement_margin: 0.001
+  decisive_margin: 0.002
+  temperature: 0.004
+  max_challenger_weight: 1.0
+  decision_mode: winner_take_most
+
+ml_incumbent_gate:
+  loss_window: 252
+  min_history: 63
+  improvement_margin: 0.001
+  decisive_margin: 0.002
+  temperature: 0.004
+  max_challenger_weight: 1.0
+  decision_mode: winner_take_most
+
+final_blend:
+  loss_window: 252
+  min_history: 63
+  temperature: 0.012
+  stat_prior: 0.10
+  ml_prior: 0.90
+
+final_guard:
+  loss_window: 252
+  min_history: 63
+  improvement_margin: 0.001
+  decisive_margin: 0.002
+  temperature: 0.004
+  max_challenger_weight: 1.0
+  decision_mode: winner_take_most
+
+valuation:
+  rolling_window: 756
+  min_history: 126
+  cheap_quantile: 0.15
+  expensive_quantile: 0.85
+  minimum_absolute_gap: 0.03
+  confirmed_cheap_quantile: 0.10
+  confirmed_expensive_quantile: 0.90
+  confirmed_minimum_absolute_gap: 0.05
+  confirmed_robust_z: 1.0
+  absolute_cheap_gap: -0.10
+  absolute_expensive_gap: 0.10

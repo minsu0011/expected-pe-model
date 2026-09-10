@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pe-regime-v04-overlay"
+version = "0.4.0"
+description = "Causal regime-utility and Expected-P/E bottleneck overlay for PE Regime Engine v0.3"
+readme = "README_KO.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+dependencies = [
+  "numpy>=1.26",
+  "pandas>=2.1",
+  "scikit-learn>=1.4",
+  "lightgbm>=4.3",
+  "PyYAML>=6.0",
+]
+
+[project.scripts]
+pe-regime-v04 = "pe_regime_v04.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+addopts = "-q --strict-markers"
+testpaths = ["tests"]
+markers = [
+  "release_scope: self-contained tests that require only packaged release files",
+  "research_provenance: repository-only checks that require sealed research evidence outside the release archive",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"

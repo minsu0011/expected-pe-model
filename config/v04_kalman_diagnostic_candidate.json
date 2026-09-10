@@ -1,0 +1,22 @@
+{
+  "candidates": {
+    "kalman_diag_b25": {
+      "selection_column": "v04_market_conditioned_kalman_diagnostic_expected_pe",
+      "incumbent_column": "ml_expected_pe",
+      "overrides": {
+        "expected_pe": {
+          "include_return_forecast_features": false
+        },
+        "market_conditioned_diagnostic": {
+          "enabled": true,
+          "q_over_r": 0.01,
+          "clip_sigma": 3.0,
+          "scale_window": 252,
+          "scale_min_history": 126,
+          "scale_floor": 0.01,
+          "latent_weight": 0.25
+        }
+      }
+    }
+  }
+}

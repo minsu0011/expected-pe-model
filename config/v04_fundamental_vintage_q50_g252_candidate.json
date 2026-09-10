@@ -1,0 +1,13 @@
+{
+  "candidates": {
+    "fundamental_vintage_q50_g252": {
+      "selection_column": "v04_fundamental_vintage_expected_pe",
+      "incumbent_column": "ml_expected_pe",
+      "overrides": {
+        "fundamental_vintage": {
+          "enabled": true
+        }
+      }
+    }
+  }
+}

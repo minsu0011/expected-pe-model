@@ -1,0 +1,17 @@
+# 병목과 승격 판단
+
+## geometry는 왜 중요한가
+
+prefix에 미래 데이터를 덧붙였을 때 과거 상태나 배수가 바뀌는지, 실패한 block에서 정확한 기준 모델로 돌아가는지가 후보 계약이다. 수치 출력이 유한하다는 사실만으로 이를 충족하지 않는다.
+
+C4의 연구 survivor 지위는 특정 동결 실험 안의 판단이다. EPS 실제 입력 연결에서 prefix·fallback 계약을 거부한 결과와 모순되지 않는다. 이 연결을 살리기 위해 IRLS cap·허용오차·fallback·shrink를 바꾸지 않았다.
+
+## 단순 대조군을 남긴 이유
+
+C3의 고정 consensus는 학습 없이도 얻을 수 있는 조정이다. C1의 예산, C2의 confidence, C4의 강건 상태, C5의 sequence가 각각 추가한 정보가 무엇인지 구분하는 기준이 된다.
+
+## production을 바꾸지 않은 이유
+
+후보의 목적·stress·입력 정보 집합이 다르고 corrected stress와 실입력 검증이 남아 있다. 독립적인 승격 근거가 없는 상태에서 더 최신 이름이라는 이유로 runtime을 바꾸지 않았다.
+
+[registry](../../MODEL_REGISTRY.json)에서 확인하는 것은 역할과 권한이다. 연구 결과의 높은 점수와 production 승격은 같은 결정이 아니다.

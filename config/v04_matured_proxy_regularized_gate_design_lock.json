@@ -1,0 +1,213 @@
+{
+  "format_version": 1,
+  "status": "pre_registered_unreserved_unopened",
+  "created_at": "2026-08-18T22:18:58.9367460+09:00",
+  "candidate_id": "causal_matured_forward_median_regularized_promotion_v1",
+  "candidate_count": 1,
+  "hyperparameter_grid_count": 1,
+  "selection_column": "v04_matured_proxy_regularized_expected_pe",
+  "semantic_type": "market_conditioned_delayed_feedback_eod_research_surface",
+  "economic_hypothesis": "A regime-conditioned Expected-P/E challenger may add persistent valuation information, but routing it on same-row observed-P/E loss selects transient market noise. A fully matured 21-session future-observed-multiple proxy and a bounded raw-ML-anchored soft weight should improve latent/fair evaluation without winner-take-most branch flips.",
+  "routing_estimand": "median of log observed_pe over sessions s+1 through s+21, attached to prediction origin s and usable only from decision row s+22",
+  "routing_estimand_is_not": "contemporaneous latent, intrinsic, fundamental, or synthetic true_fair_pe",
+  "formula": {
+    "baseline_at_origin": "B_s = ml_expected_pe_s",
+    "challenger_at_origin": "C_s = v04_ml_expected_pe_with_regime_s",
+    "matured_proxy": "Q_s = median(log(observed_pe_{s+1}),...,log(observed_pe_{s+21})) with all 21 values positive finite",
+    "paired_losses_at_decision_t": "rolling 252-origin mean absolute log error for B and C over the same valid origins s in [t-273,t-22]",
+    "gain": "G_t = loss_B_t - loss_C_t",
+    "weight": "w_t = 0 when G_t <= 0; otherwise 0.5 * (1 - exp(-G_t / 0.004))",
+    "candidate": "exp((1-w_t)*log(B_t) + w_t*log(C_t))",
+    "raw_anchor": "B_t is mandatory; challenger-only fallback is forbidden"
+  },
+  "locked_parameters": {
+    "target_horizon_sessions": 21,
+    "target_method": "forward_log_median",
+    "maturity_shift_sessions": 1,
+    "loss_window": 252,
+    "min_history": 63,
+    "improvement_margin": 0.0,
+    "temperature": 0.004,
+    "max_challenger_weight": 0.5,
+    "blend_method": "log_geometric",
+    "decision_mode": "soft_only"
+  },
+  "causality_contract": {
+    "eligible_origin_lower_at_t": "max(0,t-273)",
+    "eligible_origin_upper_at_t": "t-22",
+    "latest_observed_target_row_used_at_t": "t-1",
+    "current_row_observed_target_consumed": false,
+    "future_rows_consumed": false,
+    "true_fair_pe_runtime_use": "forbidden",
+    "all_21_target_rows_required": true,
+    "origin_observed_pe_must_be_positive_finite": true,
+    "single_symbol_timeline_required": true,
+    "duplicate_or_nonmonotone_date": "reject whole frame",
+    "shift_below_22": "P0_REJECT",
+    "cross_symbol_window": "P0_REJECT"
+  },
+  "availability_and_fail_close": {
+    "baseline_invalid": "candidate NaN; never use challenger alone",
+    "challenger_invalid_with_valid_baseline": "exact baseline, weight 0, accepted false, fallback true",
+    "immature_or_nonpositive_gain": "exact baseline, weight 0, accepted false, fallback false",
+    "invalid_or_negative_current_observed_pe": "candidate NaN, weight 0, accepted false, fallback false; origin excluded from later paired losses",
+    "nonfinite_output": "NaN",
+    "candidate_coverage": "must equal the positive-finite raw anchor coverage on the formal common mask"
+  },
+  "public_tail_append_columns": [
+    "v04_matured_proxy_regularized_expected_pe",
+    "v04_matured_proxy_baseline_oos_log_mae",
+    "v04_matured_proxy_challenger_oos_log_mae",
+    "v04_matured_proxy_paired_oos_count",
+    "v04_matured_proxy_oos_gain",
+    "v04_matured_proxy_challenger_weight",
+    "v04_matured_proxy_accepted",
+    "v04_matured_proxy_fallback_used"
+  ],
+  "schema_contract": {
+    "preserved_v04_append_prefix_columns": 96,
+    "preserved_prefix_exact": true,
+    "new_tail_columns": 8,
+    "v04_append_columns": 104,
+    "canonical_total_columns": 254,
+    "bundled_64_total_columns": 168
+  },
+  "production_isolation": {
+    "default_enabled": false,
+    "publication_position": "after_valuation_tail_only",
+    "main_expected_pe_column": "v04_expected_pe",
+    "main_expected_pe_path_connected": false,
+    "valuation_gap_path_connected": false,
+    "valuation_state_path_connected": false,
+    "enabled_vs_disabled_first_96_exact_required": true,
+    "main_replacement_allowed_by_this_lock": false,
+    "parallel_eod_research_only": true
+  },
+  "formal_validation": {
+    "harness": "HARNESS 2.6",
+    "promotion_policy_id": "v04-dual-comparator-promotion-stat-v2",
+    "output_root": "outputs/mg1",
+    "stages": [
+      "tune",
+      "lock",
+      "heldout"
+    ],
+    "primary_comparator": "v04_expected_pe",
+    "anti_gaming_comparator": "ml_expected_pe",
+    "common_mask": "true_fair_pe and challenger and both comparators positive finite on identical daily rows",
+    "promotion_metrics": [
+      "fair_log_mae",
+      "fair_log_rmse"
+    ],
+    "minimum_seeds_per_stage": 5,
+    "required_joint_wins_per_comparator": "4/5",
+    "minimum_pooled_relative_gain_per_metric_per_comparator": 0.005,
+    "maximum_worst_seed_degradation_per_metric_per_comparator": 0.005,
+    "all_leave_one_seed_out_gains_positive": true,
+    "full_paired_daily_coverage": true,
+    "bootstrap_iterations": 49999,
+    "bootstrap_rng": "PCG64DXSM",
+    "bootstrap_methods": [
+      "moving_block",
+      "stationary"
+    ],
+    "bootstrap_block_lengths": [
+      21,
+      42,
+      63
+    ],
+    "bootstrap_cells": 24,
+    "one_sided_comparator_metric_alpha": 0.0125,
+    "all_bootstrap_lcbs_positive": true,
+    "candidate_rank": "worst of four primary/anti x MAE/RMSE relative gains",
+    "outer_jobs": 32,
+    "inner_jobs": 1,
+    "gpu": "disabled",
+    "serial_parallel_contract": "serial1 versus thread32 bit exact",
+    "causal_prefix_rows": 1500
+  },
+  "fresh_seed_allocation": {
+    "selection_rule": "least prime >= 100*k+1 for consecutive k=63..72, fixed before outcomes",
+    "tuning_seeds": [
+      6301,
+      6421,
+      6521,
+      6607,
+      6701
+    ],
+    "heldout_seeds": [
+      6803,
+      6907,
+      7001,
+      7103,
+      7207
+    ],
+    "allocation_sha256": "71f768efbc9647d61cd4e924c36a8a4259cc2ec3448794b0120d65e2f08482db",
+    "tuning_commitment_sha256": "a5380cc28b6488b562b6fd34c20dca15366de1f07b54e9b1ea75ef4a87910057",
+    "heldout_commitment_sha256": "11c90588a33eeb6b22834aeed558d3dc90cdde3b139692e011f4f5ab77772a8e",
+    "registry_status_at_lock": "unreserved",
+    "outcomes_seen": false,
+    "reuse_or_seed_exception_allowed": false
+  },
+  "downstream_review_contract": {
+    "required_after_formal_pass": true,
+    "metrics": [
+      "pe_gap_sign_flip_rate",
+      "absolute_gap_change",
+      "adaptive_state_change",
+      "confirmed_state_change",
+      "absolute_state_change",
+      "state_transition_rate",
+      "daily_log_expected_pe_turnover",
+      "p95_expected_pe_movement",
+      "extreme_tail_frequency"
+    ],
+    "excessive_behavior_change": "PASS_BUT_RESEARCH_ONLY",
+    "main_connection_before_review": "forbidden"
+  },
+  "stress_contract": {
+    "evaluation_only": true,
+    "canonical_generator_overwrite": false,
+    "scenarios": [
+      "fair_pe_sudden_jump",
+      "earnings_shock",
+      "rate_or_multiple_compression",
+      "regime_change",
+      "low_noise",
+      "high_noise",
+      "temporary_overshoot"
+    ],
+    "metrics": [
+      "jump_response_delay",
+      "post_jump_mae",
+      "peak_lag",
+      "oversmoothing_bias",
+      "false_mean_reversion"
+    ],
+    "promotion_metric_replacement_allowed": false
+  },
+  "failure_rule": "Any implementation/provenance/causality/determinism/common-mask/comparator/promotion/bootstrap/downstream contract failure means REJECT with no post-hoc threshold, seed exception, or same-family retry.",
+  "prelock_evidence": {
+    "spent_evidence_role": "mechanism diagnosis and hypothesis generation only, never promotion",
+    "fresh_candidate_scores_seen": false,
+    "fresh_seeds_generated_reserved_or_opened": false,
+    "gate_target_alignment_report_sha256": "18ca7ddb351a52e417c5785c129a405e3d7165e547aba189bcdf03a66d1d424e",
+    "gate_decision_summary_sha256": "be62148178565b9d73e2f2055c4b8916a7523dcbb11c27883d004b7d2bcbd6f6",
+    "independent_design_review_sha256": "177ee32687e412abf0e3a3dc4d361ba0c3921d1184d8ea0de8d95f7d6f195445",
+    "independent_design_review_json_sha256": "44e9807fef178b9dbc63216d6204848a9dac2e6ea04b09c5dccd18372bc965ff"
+  },
+  "implementation_artifacts_sha256": {
+    "src/pe_regime_v04/matured_proxy_gate.py": "12c3d7596250a6919fa8fc909a0e64d2ec013e05dbf164e1018b4bb649bfdd6f",
+    "src/pe_regime_v04/pipeline.py": "8b87d514d81df8cd13822cedb6eb7d475424353b5a54f8b7019120f0b2143378",
+    "src/pe_regime_v04/config.py": "cd55ef520d0764d113202928434034132e7ea9cf48b1482792fce6ef1066c4d4",
+    "config/v04_bottleneck.yaml": "1e52f6ed5f5abb3c2b720c58f39360f33506307a0f16571dba85157e534fb84e",
+    "config/v04_matured_proxy_regularized_gate_candidate.json": "4b5b995906fa6aba39a9ce891427fcf29db0ceb8fbbe112e6c7d80e3b963f7b3",
+    "scripts/run_v04_multiseed_validation.py": "c37082831c8df78bf0a0d11a34d9c556fa7ccbf9cc2a254df7a7ca005293b1c9",
+    "tests/test_matured_proxy_gate.py": "3c1e038f5413d6936e8651e709dbdebe7497a96efc013d79ae4990a043747761",
+    "tests/test_config.py": "70c74115a9688c33ecda653940264f5972d355956e576cf95a48bedfb5a3c707",
+    "tests/test_in_memory_integration.py": "5038339c6294bc9f256600e6be2541863ce57836e69c1254496982983465eafe",
+    "tests/test_pipeline_smoke.py": "136efeecc3b72780f0b6165016574c153d41e675c4e9ef9ad5491a7ee85bfd14",
+    "tests/test_multiseed_validation_harness.py": "6f2d9f65aa3da471b6bc3b8f1caa3f5949b01dc570ee9d1d73087ee892ce8173"
+  },
+  "logical_lock_sha256": "9cf87989dbd541ffaa0e725a5282e8c7707f6594de01cc08db3185192345f0c6"
+}

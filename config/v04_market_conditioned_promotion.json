@@ -1,0 +1,29 @@
+{
+  "format_version": 1,
+  "status": "benchmark_promoted_parallel_surface",
+  "promotion_pass": true,
+  "candidate_id": "kalman_diag_b25",
+  "formula_id": "kalman_qr0p010_clip3__blend025",
+  "evaluated_selection_column": "v04_market_conditioned_kalman_diagnostic_expected_pe",
+  "published_column": "v04_market_conditioned_expected_pe",
+  "incumbent_column": "ml_expected_pe",
+  "exact_parameters": {
+    "q_over_r": 0.01,
+    "clip_sigma": 3.0,
+    "scale_window": 252,
+    "scale_min_history": 126,
+    "scale_floor": 0.01,
+    "latent_weight": 0.25
+  },
+  "same_row_observed_pe_consumed": true,
+  "decision_timestamp": "after_current_row_observed_pe_is_final_eod_only",
+  "eod_only": true,
+  "fundamental_fair_pe_claim_allowed": false,
+  "main_expected_pe_replaced": false,
+  "valuation_connected": false,
+  "selected_spec_sha256": "6526c1b7cf74c5a2cbefd14cf71575602f1428e2e937fd541c3bad1975d05331",
+  "candidate_logical_lock_sha256": "c6600307c6f615c75a84aa64aeaa428ac117f729bcf4af0bf61e189271854e62",
+  "heldout_report_logical_sha256": "1f8f3cc5127b7f61f988c2bcb70c87fd8d5898c356e0491ab715b6ffb9b2e1e1",
+  "evidence_scope": "synthetic_generator_v5_only",
+  "synthetic_only_limitation": "The prospective tuning and heldout seeds are independent RNG draws from the same synthetic generator v5. Promotion establishes benchmark accuracy and determinism for an end-of-row market-conditioned surface, not external validity or a fundamental justified-P/E claim."
+}

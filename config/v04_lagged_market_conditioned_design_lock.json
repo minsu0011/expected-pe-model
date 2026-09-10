@@ -1,0 +1,226 @@
+{
+  "format_version": 1,
+  "status": "prospective_tuning_rejected_heldout_unopened_default_off",
+  "candidate_id": "gated_lagged_market_conditioned",
+  "candidate_count": 1,
+  "selection_column": "v04_gated_lagged_market_conditioned_expected_pe",
+  "raw_column": "v04_lagged_market_conditioned_raw_expected_pe",
+  "incumbent_column": "ml_expected_pe",
+  "semantic_type": "gated_market_conditioned_one_step_prior_observed_pe_anchor",
+  "decision_timestamp": "end_of_day_after_row_t_incumbent_is_available",
+  "current_price_independence_claim_allowed": false,
+  "fundamental_or_intrinsic_fair_pe_claim_allowed": false,
+  "raw_candidate": {
+    "state_model": "local_level_log_observed_pe",
+    "timing": "emit row-t candidate from state updated only through t-1, then update with row-t observed_pe",
+    "initial_state": "first positive finite observed_pe initializes log state after that row prediction",
+    "initial_covariance": 1.0,
+    "prediction_formula": "exp(0.75*log(ml_expected_pe_t) + 0.25*prior_state_log_pe_t)",
+    "uninitialized_state_fallback": "positive finite ml_expected_pe_t",
+    "missing_observation": "skip measurement update and add q_over_r to covariance after initialization",
+    "innovation_scale": "1.4826*MAD over at most 252 prior raw innovations, available after 126 innovations, floored at 0.01",
+    "innovation_clipping": "clip current raw innovation to plus_or_minus 3 times prior-history robust scale",
+    "current_observed_pe_direct_prediction_dependency": false,
+    "row_t_incumbent_dependency": true
+  },
+  "gate": {
+    "config_section": "lagged_market_conditioned",
+    "implicit_ml_incumbent_gate_reference_allowed": false,
+    "api": "pe_regime_v04.utility_gate.shifted_candidate_gate",
+    "control_target": "observed_pe",
+    "control_target_role": "causal_online_routing_only_not_promotion_truth",
+    "promotion_truth": "synthetic true_fair_pe supplied only to the external validation harness",
+    "availability_shift": 1,
+    "causal_timing": "row-t pair counts, losses, gains, acceptance, and weight use observations only through t-1",
+    "selection_rule": "winner_take_most with the locked margins, temperature, and maximum weight"
+  },
+  "locked_parameters": {
+    "q_over_r": 0.01,
+    "clip_sigma": 3.0,
+    "scale_window": 252,
+    "scale_min_history": 126,
+    "scale_floor": 0.01,
+    "latent_weight": 0.25,
+    "incumbent_weight": 0.75,
+    "loss_window": 252,
+    "min_history": 63,
+    "improvement_margin": 0.001,
+    "decisive_margin": 0.002,
+    "temperature": 0.004,
+    "max_challenger_weight": 1.0,
+    "decision_mode": "winner_take_most",
+    "availability_shift": 1
+  },
+  "public_tail_append_columns": [
+    "v04_lagged_market_conditioned_raw_expected_pe",
+    "v04_gated_lagged_market_conditioned_expected_pe",
+    "v04_gated_lagged_market_conditioned_paired_oos_count",
+    "v04_gated_lagged_market_conditioned_challenger_weight",
+    "v04_gated_lagged_market_conditioned_accepted",
+    "v04_gated_lagged_market_conditioned_fallback_used"
+  ],
+  "schema_contract": {
+    "preserved_v04_append_prefix_columns": 87,
+    "preserved_prefix_exact": true,
+    "new_tail_columns": 6,
+    "lagged_completion_prefix_columns": 93,
+    "later_isolated_smoothing_tail_columns": 3,
+    "later_isolated_matured_proxy_tail_columns": 8,
+    "v04_append_columns": 104,
+    "canonical_total_columns": 254,
+    "bundled_64_total_columns": 168
+  },
+  "production_isolation": {
+    "default_enabled": false,
+    "publication_position": "after_valuation_tail_only",
+    "main_expected_pe_column": "v04_expected_pe",
+    "main_expected_pe_path_connected": false,
+    "valuation_gap_path_connected": false,
+    "valuation_state_path_connected": false,
+    "enabled_vs_disabled_first_87_exact_required": true,
+    "enabled_vs_disabled_main_expected_pe_gap_and_state_exact_required": true,
+    "main_replacement_allowed_by_this_lock": false,
+    "parallel_research_surface_only": true
+  },
+  "retrospective_evidence_decision": {
+    "raw_fixed_candidate": "NO_GO because seed 1601 worst relative harm 0.009789036209206254 exceeded the 0.005 cap",
+    "gated_fixed_candidate": "conditional GO for an isolated default-off prospective test only",
+    "implementation_equivalence_check": {
+      "existing_seed": 11,
+      "rows": 1800,
+      "raw_bit_exact": true,
+      "gated_final_bit_exact": true,
+      "paired_count_exact": true,
+      "challenger_weight_bit_exact": true,
+      "accepted_exact": true,
+      "fallback_exact": true
+    },
+    "interpretation_limit": "observed_pe routing success is not evidence of intrinsic or fundamental fair-P/E accuracy"
+  },
+  "invalid_attempts": [
+    {
+      "attempt_id": "lk1",
+      "output_root": "outputs/lk1",
+      "harness": "HARNESS 2.3",
+      "reservation_sequence": 2,
+      "reservation_id": "13a2de2ab9e677674274486a50f6266c883519caaa25bddf24f3664c79dfda20",
+      "registry_entry_sha256": "8800daaac5939e5b397b19c10e8a5fc38a46abf6c9c63c7c08c73bf4176e1f96",
+      "tuning_seeds": [
+        3307,
+        3407,
+        3511,
+        3607,
+        3709
+      ],
+      "locked_heldout_seeds": [
+        3803,
+        3907,
+        4001,
+        4111,
+        4201
+      ],
+      "reserved_seeds_permanently_spent": true,
+      "last_generated_artifact": "tuning seed 3307 parallel32 overlay output",
+      "failure_stage": "post_overlay_pre_metric_analysis",
+      "failure_message": "paired finite-positive fair mask is empty",
+      "failure_cause": "HARNESS 2.3 unconditionally evaluated the configured-off all-unavailable v04_fundamental_vintage_expected_pe diagnostic surface",
+      "selected_incumbent_truth_manual_finite_positive_rows": 1296,
+      "production_scope_rows": 1296,
+      "promotion_metrics_computed": false,
+      "candidate_or_locked_parameters_changed": false,
+      "partial_output_formal_evidence_allowed": false,
+      "resume_allowed_after_harness_change": false,
+      "disposition": "invalid harness attempt; preserve artifacts only for failure provenance and never use them as formal candidate evidence"
+    }
+  ],
+  "prospective_validation": {
+    "status": "tuning_rejected_heldout_unopened",
+    "harness": "HARNESS 2.4",
+    "registry_id": "v04-prospective-spent-seeds-v1",
+    "registry_path": "outputs/v04_spent_seed_registry.json",
+    "output_root": "outputs/lk2",
+    "proposed_tuning_seeds": [
+      4303,
+      4409,
+      4513,
+      4603,
+      4703
+    ],
+    "proposed_locked_heldout_seeds": [
+      4801,
+      4903,
+      5003,
+      5101,
+      5209
+    ],
+    "metrics_unseen": false,
+    "seed_values_are_unreserved_proposals": false,
+    "reservation_or_run_authorized_by_this_lock": true,
+    "reservation_sequence": 3,
+    "reservation_id": "4c176364cdafaca995b251ff8372bd9df75741e53d57f46a4a75ee8fbe6d851e",
+    "registry_entry_sha256": "1345ba5a92790a41809f16698be236372e9abba114dd917c48c1de767d835173",
+    "reserved_seeds_permanently_spent": true,
+    "heldout_opened": false,
+    "heldout_metrics_computed": false,
+    "why_five_plus_five": "meets the code-owned prospective minimum for tuning and heldout groups while keeping selection and final confirmation disjoint",
+    "promotion_metrics": [
+      "fair_log_mae",
+      "fair_log_rmse"
+    ],
+    "gate_control_target_is_not_promotion_truth": true,
+    "full_natural_daily_paired_coverage": 1.0,
+    "formal_outcome": {
+      "decision": "REJECT_TUNING",
+      "reason": "four of twelve locked simultaneous long-block bootstrap lower bounds were nonpositive",
+      "tuning_joint_seed_wins": "5/5",
+      "pooled_fair_log_mae_relative_gain": 0.025788,
+      "pooled_fair_log_rmse_relative_gain": 0.030828,
+      "bootstrap_cells_passed": "8/12",
+      "failed_cells": [
+        "moving_block_42_fair_log_mae",
+        "moving_block_63_fair_log_mae",
+        "moving_block_63_fair_log_rmse",
+        "stationary_63_fair_log_mae"
+      ],
+      "candidate_or_locked_parameters_changed": false,
+      "heldout_directory_created": false
+    },
+    "on_failure": "remain default-off and do not replace or feed the production v04_expected_pe path",
+    "on_success": "eligible only for a separately reviewed parallel surface decision; no automatic main replacement"
+  },
+  "implementation_artifacts_sha256": {
+    "src/pe_regime_v04/lagged_market_conditioned.py": "cedcb05554ab377744ee3c9dafcb62a175486bd15277cfc4283fbbfc60190103",
+    "src/pe_regime_v04/utility_gate.py": "cc0316b61a85d463a38532b0601ecd942c172a1f6e65773335dda23e7a2da632",
+    "src/pe_regime_v04/config.py": "cd55ef520d0764d113202928434034132e7ea9cf48b1482792fce6ef1066c4d4",
+    "src/pe_regime_v04/pipeline.py": "8b87d514d81df8cd13822cedb6eb7d475424353b5a54f8b7019120f0b2143378",
+    "config/v04_bottleneck.yaml": "1e52f6ed5f5abb3c2b720c58f39360f33506307a0f16571dba85157e534fb84e",
+    "scripts/run_v04_multiseed_validation.py": "c37082831c8df78bf0a0d11a34d9c556fa7ccbf9cc2a254df7a7ca005293b1c9",
+    "tests/test_lagged_market_conditioned.py": "1846307fa53e399c9756234e999f51d9d8c7258c78f4d8433e24253f1ad22632",
+    "tests/test_config.py": "70c74115a9688c33ecda653940264f5972d355956e576cf95a48bedfb5a3c707",
+    "tests/test_in_memory_integration.py": "5038339c6294bc9f256600e6be2541863ce57836e69c1254496982983465eafe",
+    "tests/test_pipeline_smoke.py": "136efeecc3b72780f0b6165016574c153d41e675c4e9ef9ad5491a7ee85bfd14",
+    "tests/test_multiseed_validation_harness.py": "6f2d9f65aa3da471b6bc3b8f1caa3f5949b01dc570ee9d1d73087ee892ce8173",
+    "config/v04_lagged_market_conditioned_candidate.json": "0f0a5a17c5cd56c1b02863c93ffba5446d62c6f41cf0a7784bb1672339f74d8e"
+  },
+  "retrospective_evidence_sha256": {
+    "outputs/v04_lagged_kalman_feasibility_20260818/DESIGN_LOCK.json": "ccb116150dc32d0a61172be2f5687302cba0c33023cf701f67a614149db98165",
+    "outputs/v04_lagged_kalman_feasibility_20260818/summary.json": "ba4855e2512b249c05d95845da7887d59f4ca18cfc2665f7d032254ddfb87cef",
+    "outputs/v04_lagged_kalman_feasibility_20260818/analyze_lagged_kalman_feasibility.py": "783c97f6d7467cc4a05c65a4e2b126935d9ae79d57f815ccd55aee389c39e4ba",
+    "outputs/v04_lagged_kalman_feasibility_20260818/CHECKSUMS.sha256": "4913636b47ae0d0c649cd71a96f1e930373c60e6bbc93ab33f20a46a05e5dff8",
+    "outputs/v04_lagged_kalman_gated_feasibility_20260818/DESIGN_LOCK.json": "40f8f176dbee32e04f19648c7033f38d02858c6a594e0d8ac9c215e7607bb3bb",
+    "outputs/v04_lagged_kalman_gated_feasibility_20260818/summary.json": "7a2090c06b7cc1bf7e4183455d8435b4e67c38e2ef89cd5cb5cf234b7fd8c1f6",
+    "outputs/v04_lagged_kalman_gated_feasibility_20260818/analyze_gated_lagged_kalman.py": "a876264f339faecb7d8e28d9624346843301c1381f8f0048cb1b9c6993f942ea",
+    "outputs/v04_lagged_kalman_gated_feasibility_20260818/CHECKSUMS.sha256": "beb74fdd6914b5d5de93776200abc537fdef95c2953c2fe40309ebb69abe4105"
+  },
+  "prospective_tuning_rejection_sha256": {
+    "outputs/lk2/run_manifest.json": "2736330d8c97d332f131ffe83df4ede8238547428e68661da84bcc96ccaefad3",
+    "outputs/lk2/checkpoint.json": "6bda8fed463fd36b571fda82db89c2ccebe23c41a40ea90fde95504428545cc0",
+    "outputs/lk2/promotion_policy.lock.json": "597525fd708d077cd026653892a894a580e2c6fbc0082efdd7c67cf2451ef995",
+    "outputs/lk2/tuning_common_metrics.json": "1ee852c7434bf8ba9fc1210a485a26ab61e69da94dc56a5608525c579ea46cfb",
+    "outputs/lk2/lock_rejected.json": "9b6e3f84b5822926db3c321301359c7ce187b4a0274440649805be5340d90ec4",
+    "outputs/v04_spent_seed_registry.json": "d23b53cf1f353c3a009c2b4453b13d78cb79854448ea5b9e0cdecaaa9b0fd156"
+  },
+  "candidate_spec_sha256": "0f0a5a17c5cd56c1b02863c93ffba5446d62c6f41cf0a7784bb1672339f74d8e",
+  "logical_lock_hash_rule": "sha256(UTF-8 canonical JSON with sorted keys and compact separators after removing logical_lock_sha256)",
+  "logical_lock_sha256": "20da6961a6fbae80cfc9279770fdeb8363072af85b8b634b215d02aa8ae4cd49"
+}
