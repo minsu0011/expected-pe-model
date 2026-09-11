@@ -60,4 +60,6 @@ python -m pytest tests/test_metrics.py -q
 
 ## 상세 문서
 
-[연구 안내](docs/wiki/Home.md) · [구조](docs/wiki/Architecture.md) · [개발 과정](docs/wiki/Development-Journey.md) · [모델 발전과 승격 판단](docs/wiki/Model-Evolution.md) · [병목과 실험 결정](docs/wiki/Experiments-and-Decisions.md) · [결과와 한계](docs/wiki/Validation-and-Results.md)
+[연구 안내](https://github.com/minsu0011/expected-pe-model/wiki/Home) · [구조](https://github.com/minsu0011/expected-pe-model/wiki/Architecture) · [개발 과정](https://github.com/minsu0011/expected-pe-model/wiki/Development-Journey) · [모델 발전과 승격 판단](https://github.com/minsu0011/expected-pe-model/wiki/Model-Evolution) · [병목과 실험 결정](https://github.com/minsu0011/expected-pe-model/wiki/Experiments-and-Decisions) · [결과와 한계](https://github.com/minsu0011/expected-pe-model/wiki/Validation-and-Results)
+
+문서의 저장소 내부 사본은 [docs/wiki](docs/wiki)에 함께 보관한다.
